@@ -152,3 +152,5 @@ export default function App() {
 
 [![CI Pipeline](https://github.com/BillTheP0ny/jwt-pizza/actions/workflows/ci.yml/badge.svg)](https://github.com/BillTheP0ny/jwt-pizza/actions/workflows/ci.yml)
 
+[![CI Pipeline](https://github.com/BillTheP0ny/jwt-pizza/actions/workflows/ci.yml/badge.svg)](https://github.com/BillTheP0ny/jwt-pizza/actions/workflows/ci.yml)
+
