@@ -28,9 +28,34 @@ jobs:
           echo "version=$version" >> "$GITHUB_OUTPUT"
           printf '{"version": "%s" }' "$version" > public/version.json
 
+      # ✅ NEW: install deps first (needed for tests + build)
+      - name: Install dependencies
+        run: npm ci
+
+      # ✅ NEW: tools needed for badge update
+      - name: Install tools (jq, bc)
+        run: sudo apt-get update && sudo apt-get install -y jq bc
+
+      # ✅ NEW: install Playwright browser
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+
+      # ✅ NEW: run UI tests with coverage (fails if <80 because of .nycrc.json)
+      - name: Run UI tests with coverage
+        run: npm run test:coverage
+
+      # ✅ NEW: update coverage badge in Factory
+      - name: Update coverage badge
+        run: |
+          coverage=$(jq '.total.lines.pct' coverage/coverage-summary.json)
+          color=$(echo "$coverage < 80" | bc | awk '{if ($1) print "red"; else print "green"}')
+          curl -fsS -X POST "https://pizza-factory.cs329.click/api/badge/${{ secrets.NET_ID }}/jwtpizzacoverage?label=Coverage&value=$coverage%25&color=$color" \
+            -H "Authorization: Bearer ${{ secrets.FACTORY_API_KEY }}"
+
+      # ✅ CHANGED: build step no longer runs npm ci again
       - name: Build
         run: |
-          npm ci && npm run build
+          npm run build
           cp dist/index.html dist/404.html
 
       - name: Update pages artifact
