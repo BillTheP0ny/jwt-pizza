@@ -4,7 +4,7 @@
 
 [![CI Pipeline](https://github.com/BillTheP0ny/jwt-pizza/actions/workflows/ci.yml/badge.svg)](https://github.com/BillTheP0ny/jwt-pizza/actions/workflows/ci.yml)
 
-[![Coverage](https://pizza-factory.cs329.click/api/badge/YOURNETID/jwtpizzacoverage?t=1)](https://pizza-factory.cs329.click/api/badge/YOURNETID/jwtpizzacoverage)
+[![Coverage](https://pizza-factory.cs329.click/api/badge/jparr4/jwtpizzacoverage?t=1)](https://pizza-factory.cs329.click/api/badge/YOURNETID/jwtpizzacoverage)
 
 
 
