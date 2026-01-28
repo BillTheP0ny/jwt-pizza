@@ -4,11 +4,12 @@ import View from './view';
 import Card from '../components/card';
 import Button from '../components/button';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Franchise, Menu, Pizza, Store } from '../service/pizzaService';
+import { Franchise, Pizza, Store } from '../service/pizzaService';
+import type { Menu as MenuItem } from '../service/pizzaService';
 
 export default function Menu() {
   const [order, setOrder] = useState(useLocation().state?.order || { items: [] });
-  const [menu, setMenu] = useState<Menu>([]);
+const [menu, setMenu] = useState<MenuItem>([]);
   const [storeMap, setStoreMap] = useState<{ [key: string]: { store: Store; franchise: Franchise } }>({});
   const [selectedStore, setSelectedStore] = useState(order.storeId || '');
   const navigate = useNavigate();
