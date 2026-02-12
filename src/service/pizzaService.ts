@@ -51,7 +51,7 @@ type UserRole = {
 };
 
 type User = {
-  id?: string;
+  id: number;
   name?: string;
   email?: string;
   password?: string;
@@ -112,6 +112,8 @@ interface PizzaService {
   docs(docType: string): Promise<Endpoints>;
   listUsers(page: number, limit: number, name: string): Promise<{ users: User[]; more: boolean }>;
   deleteUser(userId: number): Promise<void>;
+  updateUser(user: User): Promise<User>;
+
 
 }
 
