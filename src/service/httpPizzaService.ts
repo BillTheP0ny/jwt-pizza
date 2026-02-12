@@ -1,4 +1,16 @@
-import { PizzaService, Franchise, FranchiseList, Store, OrderHistory, User, Menu, Order, Endpoints, OrderResponse, JWTPayload } from './pizzaService';
+import {
+  PizzaService,
+  Franchise,
+  FranchiseList,
+  Store,
+  OrderHistory,
+  User,
+  Menu,
+  Order,
+  Endpoints,
+  OrderResponse,
+  JWTPayload,
+} from './pizzaService';
 
 const pizzaServiceUrl = import.meta.env.VITE_PIZZA_SERVICE_URL;
 const pizzaFactoryUrl = import.meta.env.VITE_PIZZA_FACTORY_URL;
@@ -8,7 +20,7 @@ class HttpPizzaService implements PizzaService {
     return new Promise(async (resolve, reject) => {
       try {
         const options: any = {
-          method: method,
+          method,
           headers: {
             'Content-Type': 'application/json',
           },
@@ -20,7 +32,7 @@ class HttpPizzaService implements PizzaService {
           options.headers['Authorization'] = `Bearer ${authToken}`;
         }
 
-        if (body) {
+        if (body !== undefined) {
           options.body = JSON.stringify(body);
         }
 
@@ -29,16 +41,36 @@ class HttpPizzaService implements PizzaService {
         }
 
         const r = await fetch(path, options);
-        const j = await r.json();
+
+        // Some endpoints may return empty body (204)
+        const text = await r.text();
+        const j = text ? JSON.parse(text) : null;
+
         if (r.ok) {
           resolve(j);
         } else {
-          reject({ code: r.status, message: j.message });
+          reject({ code: r.status, message: j?.message ?? 'request failed' });
         }
       } catch (e: any) {
         reject({ code: 500, message: e.message });
       }
     });
+  }
+
+  // ✅ NEW: list users (admin)
+  async listUsers(page: number, limit: number, name: string): Promise<{ users: User[]; more: boolean }> {
+    const qp = new URLSearchParams({
+      page: String(page),
+      limit: String(limit),
+      name: name || '*',
+    });
+
+    return this.callEndpoint(`/api/user?${qp.toString()}`, 'GET');
+  }
+
+  // ✅ NEW: delete user (admin)
+  async deleteUser(userId: number): Promise<void> {
+    await this.callEndpoint(`/api/user/${userId}`, 'DELETE');
   }
 
   async login(email: string, password: string): Promise<User> {
