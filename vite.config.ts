@@ -15,8 +15,11 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        // ✅ Local: defaults to your local backend
+        // ✅ GitHub Actions: set VITE_PIZZA_SERVICE_URL to the deployed backend
+        target: process.env.VITE_PIZZA_SERVICE_URL || 'http://localhost:3000',
         changeOrigin: true,
+        secure: false, // allows https targets without cert issues
       },
     },
   },
