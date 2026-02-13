@@ -28,16 +28,19 @@ export default function AdminDashboard(props: Props) {
 
   React.useEffect(() => {
     (async () => {
+      if (!Role.isRole(props.user, Role.Admin)) return;
       setFranchiseList(await pizzaService.getFranchises(franchisePage, 3, '*'));
     })();
   }, [props.user, franchisePage]);
 
-  // Load users whenever admin, page, or filter changes
+  // Load users whenever admin or page changes
   React.useEffect(() => {
     (async () => {
       if (!Role.isRole(props.user, Role.Admin)) return;
+
       const name = (filterUserRef.current?.value || '').trim();
       const r = await pizzaService.listUsers(usersPage, usersLimit, name ? `*${name}*` : '*');
+
       setUsers(r.users as User[]);
       setUsersMore(r.more);
     })();
@@ -48,11 +51,11 @@ export default function AdminDashboard(props: Props) {
   }
 
   async function closeFranchise(franchise: Franchise) {
-    navigate('/admin-dashboard/close-franchise', { state: { franchise: franchise } });
+    navigate('/admin-dashboard/close-franchise', { state: { franchise } });
   }
 
   async function closeStore(franchise: Franchise, store: Store) {
-    navigate('/admin-dashboard/close-store', { state: { franchise: franchise, store: store } });
+    navigate('/admin-dashboard/close-store', { state: { franchise, store } });
   }
 
   async function filterFranchises() {
@@ -69,7 +72,8 @@ export default function AdminDashboard(props: Props) {
 
   async function deleteUser(userId: number) {
     await pizzaService.deleteUser(userId);
-    // reload page after delete
+
+    // reload users after delete
     const name = (filterUserRef.current?.value || '').trim();
     const r = await pizzaService.listUsers(usersPage, usersLimit, name ? `*${name}*` : '*');
     setUsers(r.users as User[]);
@@ -87,7 +91,10 @@ export default function AdminDashboard(props: Props) {
       <View title="Mama Ricci's kitchen">
         <div className="text-start py-8 px-4 sm:px-6 lg:px-8">
           {/* ------------------- Franchises ------------------- */}
-          <h3 className="text-neutral-100 text-xl">Franchises</h3>
+          <h3 className="text-neutral-100 text-xl" data-testid="franchises-heading">
+            Franchises
+          </h3>
+
           <div className="bg-neutral-100 overflow-clip my-4">
             <div className="flex flex-col">
               <div className="-m-1.5 overflow-x-auto">
@@ -103,6 +110,7 @@ export default function AdminDashboard(props: Props) {
                           ))}
                         </tr>
                       </thead>
+
                       {franchiseList.franchises.map((franchise, findex) => {
                         return (
                           <tbody key={findex} className="divide-y divide-gray-200">
@@ -114,7 +122,7 @@ export default function AdminDashboard(props: Props) {
                               <td className="px-6 py-1 whitespace-nowrap text-end text-sm font-medium">
                                 <button
                                   type="button"
-                                  className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400  hover:border-orange-800 hover:text-orange-800"
+                                  className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800"
                                   onClick={() => closeFranchise(franchise)}
                                 >
                                   <TrashIcon />
@@ -146,19 +154,38 @@ export default function AdminDashboard(props: Props) {
                           </tbody>
                         );
                       })}
+
                       <tfoot>
                         <tr>
                           <td className="px-1 py-1">
-                            <input type="text" ref={filterFranchiseRef} name="filterFranchise" placeholder="Filter franchises" className="px-2 py-1 text-sm border border-gray-300 rounded-lg" />
-                            <button type="submit" className="ml-2 px-2 py-1 text-sm font-semibold rounded-lg border border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800" onClick={filterFranchises}>
+                            <input
+                              type="text"
+                              ref={filterFranchiseRef}
+                              name="filterFranchise"
+                              placeholder="Filter franchises"
+                              className="px-2 py-1 text-sm border border-gray-300 rounded-lg"
+                            />
+                            <button
+                              type="submit"
+                              className="ml-2 px-2 py-1 text-sm font-semibold rounded-lg border border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800"
+                              onClick={filterFranchises}
+                            >
                               Submit
                             </button>
                           </td>
                           <td colSpan={4} className="text-end text-sm font-medium">
-                            <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300 " onClick={() => setFranchisePage(franchisePage - 1)} disabled={franchisePage <= 0}>
+                            <button
+                              className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300"
+                              onClick={() => setFranchisePage(franchisePage - 1)}
+                              disabled={franchisePage <= 0}
+                            >
                               «
                             </button>
-                            <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300" onClick={() => setFranchisePage(franchisePage + 1)} disabled={!franchiseList.more}>
+                            <button
+                              className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300"
+                              onClick={() => setFranchisePage(franchisePage + 1)}
+                              disabled={!franchiseList.more}
+                            >
                               »
                             </button>
                           </td>
@@ -175,12 +202,24 @@ export default function AdminDashboard(props: Props) {
             <Button className="w-36 text-xs sm:text-sm sm:w-64" title="Add Franchise" onPress={createFranchise} />
           </div>
 
-          {/* ------------------- NEW: Users ------------------- */}
-          <h3 className="text-neutral-100 text-xl mt-8">Users</h3>
+          {/* ------------------- Users ------------------- */}
+          <h3 className="text-neutral-100 text-xl mt-8" data-testid="users-heading">
+            Users
+          </h3>
+
           <div className="bg-neutral-100 overflow-clip my-4">
             <div className="p-2 flex items-center gap-2">
-              <input ref={filterUserRef} type="text" placeholder="Filter users (name)" className="px-2 py-1 text-sm border border-gray-300 rounded-lg" />
-              <button className="px-2 py-1 text-sm font-semibold rounded-lg border border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800" onClick={filterUsers}>
+              <input
+                ref={filterUserRef}
+                type="text"
+                placeholder="Filter users (name)"
+                className="px-2 py-1 text-sm border border-gray-300 rounded-lg"
+                data-testid="user-filter"
+              />
+              <button
+                className="px-2 py-1 text-sm font-semibold rounded-lg border border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800"
+                onClick={filterUsers}
+              >
                 Submit
               </button>
             </div>
@@ -195,9 +234,10 @@ export default function AdminDashboard(props: Props) {
                   ))}
                 </tr>
               </thead>
+
               <tbody className="divide-y divide-gray-200">
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-gray-100">
+                  <tr key={u.id ?? `${u.email}`} className="hover:bg-gray-100">
                     <td className="px-6 py-2 text-sm text-gray-800">{u.name}</td>
                     <td className="px-6 py-2 text-sm text-gray-800">{u.email}</td>
                     <td className="px-6 py-2 text-sm text-gray-800">{roleText(u)}</td>
@@ -205,7 +245,9 @@ export default function AdminDashboard(props: Props) {
                       <button
                         type="button"
                         className="px-2 py-1 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-1 border-orange-400 text-orange-400 hover:border-orange-800 hover:text-orange-800"
-                        onClick={() => deleteUser(u.id)}
+                        onClick={() => deleteUser(u.id!)}
+                        data-testid={`delete-user-${u.id ?? 'unknown'}`}
+                        disabled={u.id == null}
                       >
                         <TrashIcon />
                         Delete
@@ -214,13 +256,22 @@ export default function AdminDashboard(props: Props) {
                   </tr>
                 ))}
               </tbody>
+
               <tfoot>
                 <tr>
                   <td colSpan={4} className="text-end text-sm font-medium p-2">
-                    <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300" onClick={() => setUsersPage(usersPage - 1)} disabled={usersPage <= 1}>
+                    <button
+                      className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300"
+                      onClick={() => setUsersPage(usersPage - 1)}
+                      disabled={usersPage <= 1}
+                    >
                       «
                     </button>
-                    <button className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300" onClick={() => setUsersPage(usersPage + 1)} disabled={!usersMore}>
+                    <button
+                      className="w-12 p-1 text-sm font-semibold rounded-lg border border-transparent bg-white text-grey border-grey m-1 hover:bg-orange-200 disabled:bg-neutral-300"
+                      onClick={() => setUsersPage(usersPage + 1)}
+                      disabled={!usersMore}
+                    >
                       »
                     </button>
                   </td>

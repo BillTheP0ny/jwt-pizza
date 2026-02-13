@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function DinerDashboard(props: Props) {
-  const user = props.user || ({} as User);
+  const user = props.user;
   const [orders, setOrders] = React.useState<Order[]>([]);
 
   const nameRef = React.useRef<HTMLInputElement>(null);
@@ -37,6 +37,8 @@ export default function DinerDashboard(props: Props) {
   }
 
   async function updateUser() {
+    if (!user?.id) return;
+
     const updatedUser: User = {
       id: user.id,
       name: nameRef.current?.value ?? user.name,
@@ -45,10 +47,9 @@ export default function DinerDashboard(props: Props) {
       roles: user.roles,
     };
 
-    // persist to backend (this also returns a new token)
+    // persist to backend (returns {user, token} in your service facade)
     const saved = await pizzaService.updateUser(updatedUser);
 
-    // update app state so UI rerenders with new info
     props.setUser(saved);
 
     setTimeout(() => {
@@ -67,24 +68,36 @@ export default function DinerDashboard(props: Props) {
           />
         </div>
 
-        {/* Edit button right under the image */}
         <div className="mt-2">
           <Button title="Edit" className="w-16 p-0" onPress={() => HSOverlay.open(document.getElementById('hs-jwt-modal')!)} />
         </div>
 
-        <div className="my-4 text-lg text-orange-200 text-start grid grid-cols-5 gap-2">
-          <div className="font-semibold text-orange-400">name:</div> <div className="col-span-4">{user.name}</div>
-          <div className="font-semibold text-orange-400">email:</div> <div className="col-span-4">{user.email}</div>
-          <div className="font-semibold text-orange-400">role:</div>
-          <div className="col-span-4">
-            {user.roles &&
-              user.roles.map((role, index) => (
-                <span key={index}>
-                  {index === 0 ? '' : ', '} {formatRole(role)}
-                </span>
-              ))}
+        {/* If user hasn't loaded yet, show stable loading text */}
+        {!user?.id ? (
+          <div className="my-4 text-lg text-orange-200">Loading user...</div>
+        ) : (
+          <div className="my-4 text-lg text-orange-200 text-start grid grid-cols-5 gap-2">
+            <div className="font-semibold text-orange-400">name:</div>
+            <div className="col-span-4" data-testid="user-name">
+              {user.name}
+            </div>
+
+            <div className="font-semibold text-orange-400">email:</div>
+            <div className="col-span-4" data-testid="user-email">
+              {user.email}
+            </div>
+
+            <div className="font-semibold text-orange-400">role:</div>
+            <div className="col-span-4" data-testid="user-roles">
+              {user.roles &&
+                user.roles.map((role, index) => (
+                  <span key={index}>
+                    {index === 0 ? '' : ', '} {formatRole(role)}
+                  </span>
+                ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {orders?.length === 0 && (
           <div className="text-neutral-100">
@@ -164,10 +177,10 @@ export default function DinerDashboard(props: Props) {
               <div className="p-4 overflow-y-scroll max-h-52">
                 <div className="my-4 text-lg text-start grid grid-cols-5 gap-2 items-center">
                   <div className="font-semibold">name:</div>
-                  <input type="text" className="col-span-4 border border-gray-300 rounded-md p-1" defaultValue={user.name} ref={nameRef} />
+                  <input type="text" className="col-span-4 border border-gray-300 rounded-md p-1" defaultValue={user?.name ?? ''} ref={nameRef} />
 
                   <div className="font-semibold">email:</div>
-                  <input type="email" className="col-span-4 border border-gray-300 rounded-md p-1" defaultValue={user.email} ref={emailRef} />
+                  <input type="email" className="col-span-4 border border-gray-300 rounded-md p-1" defaultValue={user?.email ?? ''} ref={emailRef} />
 
                   <div className="font-semibold">password:</div>
                   <input type="text" className="col-span-4 border border-gray-300 rounded-md p-1" defaultValue="" ref={passwordRef} />
@@ -179,6 +192,7 @@ export default function DinerDashboard(props: Props) {
                   type="button"
                   className="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none"
                   onClick={updateUser}
+                  disabled={!user?.id}
                 >
                   Update
                 </button>
