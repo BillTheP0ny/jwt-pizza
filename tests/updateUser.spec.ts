@@ -1,26 +1,10 @@
 import { test, expect } from 'playwright-test-coverage';
 
-/**
- * Wait for a "logged in" signal without relying on a specific avatar link.
- * 1) Prefer localStorage token (most reliable)
- * 2) Fallback: Logout link/button becomes visible
- */
-async function waitUntilLoggedIn(page: any) {
-  // Try token-based signal first (adjust keys if your app uses something else)
-  try {
-    await page.waitForFunction(() => {
-      const keys = ['token', 'jwt', 'accessToken', 'authToken'];
-      return keys.some((k) => window.localStorage.getItem(k));
-    }, { timeout: 15000 });
-    return;
-  } catch {
-    // Fallback if your app doesn't store tokens in localStorage
-  }
-
-  // Fallback: look for logout in UI
-  await expect(
-    page.getByRole('link', { name: /logout/i }).or(page.getByRole('button', { name: /logout/i }))
-  ).toBeVisible({ timeout: 15000 });
+async function waitForToken(page: any) {
+  await page.waitForFunction(() => {
+    const t = window.localStorage.getItem('token');
+    return typeof t === 'string' && t.length > 10;
+  }, { timeout: 15000 });
 }
 
 test('diner can update name and see it on screen', async ({ page }) => {
@@ -35,12 +19,10 @@ test('diner can update name and see it on screen', async ({ page }) => {
   await page.getByRole('textbox', { name: /email address/i }).fill(email);
   await page.getByRole('textbox', { name: /password/i }).fill(password);
 
-  await Promise.all([
-    page.waitForLoadState('networkidle'),
-    page.getByRole('button', { name: /register/i }).click(),
-  ]);
+  await page.getByRole('button', { name: /register/i }).click();
 
-  await waitUntilLoggedIn(page);
+  // ✅ Wait for logged in signal
+  await waitForToken(page);
 
   // Go to diner dashboard
   await page.goto('/diner-dashboard');
