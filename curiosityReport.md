@@ -40,7 +40,7 @@ Chaos testing is when you break part of the program on purpose to see how it han
 - Lastly I learned that Devops is not just about deployment its about reliability. A large part of devops is about observability and testing to make the systems reliable and easy to fix.
 
 ### Conclusion
--While the course introduced load testing and chaos testing, I still did not understand how these approaches differ or when each should be used. This led me to explore how load testing, stress testing, and chaos testing work together to improve system reliability.
+- While the course introduced load testing and chaos testing, I still did not understand how these approaches differ or when each should be used. This led me to explore how load testing, stress testing, and chaos testing work together to improve system reliability.
 
 
 ### References
