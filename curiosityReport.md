@@ -1,17 +1,9 @@
-By the end of the course you must do the following:
-
-Pick a curiosity topic
-Research the topic
-Create a markdown file and insert it into your fork of the jwt-pizza repository in a file named curiosityReport.md.
-Populate the markdown file with what you learned
-Once you are done, go over to Canvas and submit the URL of your markdown file. Your URL should look something like this:
-
 # Curiosity Report
 
-## Topic: What is GitOps and How Is It Different from DevOps?
+## Topic: Load Testing vs Stress Testing vs Chaos Testing
 
 ### Overview
-I chose to investigate **GitOps** because it’s a topic I’ve heard mentioned in conversations around modern DevOps practices, especially when working with container orchestration platforms like Kubernetes. GitOps is often described as a more streamlined way to manage both infrastructure and application deployments by using Git as the single source of truth.
+I chose this topic because during the course I used K6 for load testing and I will work with chaos testing soon in the JWT Pizza project. This made me curious about how different types of testing—load, stress, and chaos—relate to each other and when each should be used.
 
 ### What is GitOps?
 **GitOps** is a set of practices that use Git repositories as the source of truth for defining and managing infrastructure and application configurations. GitOps takes the idea of “Infrastructure as Code” (IaC) to the next level by making Git the center of deployment pipelines. 
@@ -23,14 +15,13 @@ The two biggest hallmarks of GitOps:
 ### Comparing GitOps and DevOps
 While **DevOps** is a broad term describing the culture and methodologies combining development and operations, **GitOps** is a specific strategy or methodology that can be implemented within a DevOps environment. Here’s a quick comparison:
 
-| Aspect            | DevOps (General)                            | GitOps (Specific Strategy)                |
-|-------------------|---------------------------------------------|-------------------------------------------|
-| **Focus**         | Automating software delivery & ops          | Managing everything (infra + apps) in Git |
-| **Configuration** | Can be declarative or imperative            | Must be declarative (YAML, JSON, etc.)    |
-| **Deployment Flow** | Often *push-based*: CI/CD pipelines trigger deployments | Typically *pull-based*: a controller continuously syncs changes from Git |
-| **Source of Truth** | Various systems and tools; logs scattered across pipelines | Git repository is the single source of truth |
-| **Rollback**      | May require custom scripts or manual effort | As easy as reverting to a previous commit |
-| **Auditing**      | Can be scattered across multiple tools       | Entire history in Git commits and PRs     |
+### Key Differences
+
+| Testing Type   | Goal                          | How It Works                          | When It’s Used                         | Example |
+|----------------|------------------------------|---------------------------------------|----------------------------------------|--------|
+| Load Testing   | Verify system handles expected traffic | Simulates normal user behavior        | Before production to ensure stability   | K6 simulating users ordering pizza |
+| Stress Testing | Find system limits and breaking point | Gradually increases load beyond normal | To understand capacity and failure points | Increasing users until requests fail |
+| Chaos Testing  | Test system resilience to failures | Intentionally breaks parts of system   | In production-like environments to test reliability | Shutting down a service or adding latency |
 
 In essence, GitOps provides a clear and auditable pipeline for changes, significantly reducing the friction of environment drift and configuration errors.
 
@@ -55,6 +46,7 @@ In essence, GitOps provides a clear and auditable pipeline for changes, signific
 - [Load testing applications](https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/welcome.html)
 - [PRINCIPLES OF CHAOS ENGINEERING](https://principlesofchaos.org/)
 - [Implementing chaos engineering on AWS](https://docs.aws.amazon.com/prescriptive-guidance/latest/chaos-engineering-on-aws/implementation.html)
+- [What is Stress Testing in Software Testing?](https://www.geeksforgeeks.org/software-testing/stress-testing-software-testing/)
 
 ---
 
