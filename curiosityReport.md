@@ -51,7 +51,7 @@ In essence, GitOps provides a clear and auditable pipeline for changes, signific
 - **Culture Shift**: While GitOps is a methodology, it requires a DevOps-minded culture for effective collaboration between Dev and Ops teams.
 
 ### References
-- [Argo CD Documentation](https://argo-cd.readthedocs.io/en/stable/)
+- [Argo CD Documentation]([https://argo-cd.readthedocs.io/en/stable/](https://grafana.com/docs/k6/latest/))
 - [Flux Documentation](https://fluxcd.io/docs/)
 - [GitOps Website](https://www.gitops.tech/)
 - [The GitOps FAQ by Weaveworks](https://www.weave.works/technologies/gitops/)
