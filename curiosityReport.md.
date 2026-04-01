@@ -36,15 +36,16 @@ Declarative Over Imperative: It reinforced the principle of treating infrastruct
 Reliability & Repeatability: Pull-based deployments reduce the possibility of partial updates and environment drift.
 Culture Shift: While GitOps is a methodology, it requires a DevOps-minded culture for effective collaboration between Dev and Ops teams.
 
-### References
-- AWS Prescriptive Guidance – Load testing applications  
-  https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing-applications/welcome.html
+## References
 
-- Grafana k6 Documentation  
-  https://grafana.com/docs/k6/latest/
+1. [AWS Prescriptive Guidance: Load testing applications](https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing-applications/welcome.html)  
+   Used for understanding load-testing goals, types, and practical concerns.
 
-- Principles of Chaos Engineering  
-  https://principlesofchaos.org/
+2. [Grafana k6 Documentation](https://grafana.com/docs/k6/latest/)  
+   Used for understanding how load testing is performed in practice with k6.
 
-- Netflix Chaos Monkey  
-  https://netflix.github.io/chaosmonkey/
+3. [Principles of Chaos Engineering](https://principlesofchaos.org/)  
+   Used for defining chaos testing and its purpose.
+
+4. [Netflix Chaos Monkey](https://netflix.github.io/chaosmonkey/)  
+   Used as a real-world example of chaos engineering in practice.
