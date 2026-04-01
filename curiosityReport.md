@@ -39,6 +39,10 @@ Chaos testing is when you break part of the program on purpose to see how it han
 - Another thing I learned was that real world systems are extremly unpredicatble and can unexpectedly crash or have problems so being prepared with testing to better understand the system is essential.
 - Lastly I learned that Devops is not just about deployment its about reliability. A large part of devops is about observability and testing to make the systems reliable and easy to fix.
 
+### Conclusion
+-While the course introduced load testing and chaos testing, I still did not understand how these approaches differ or when each should be used. This led me to explore how load testing, stress testing, and chaos testing work together to improve system reliability.
+
+
 ### References
 - [Grafana K6](https://grafana.com/docs/k6/latest/)
 - [Load testing applications](https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/welcome.html)
