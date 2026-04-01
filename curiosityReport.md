@@ -53,8 +53,8 @@ In essence, GitOps provides a clear and auditable pipeline for changes, signific
 ### References
 - [Grafana K6](https://grafana.com/docs/k6/latest/)
 - [Load testing applications](https://docs.aws.amazon.com/prescriptive-guidance/latest/load-testing/welcome.html)
-- [GitOps Website]([https://www.gitops.tech/](https://principlesofchaos.org/))
-- [The GitOps FAQ by Weaveworks](https://www.weave.works/technologies/gitops/)
+- [PRINCIPLES OF CHAOS ENGINEERING](https://principlesofchaos.org/)
+- [Implementing chaos engineering on AWS](https://docs.aws.amazon.com/prescriptive-guidance/latest/chaos-engineering-on-aws/implementation.html)
 
 ---
 
