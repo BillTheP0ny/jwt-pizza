@@ -29,9 +29,9 @@ Chaos testing is when you break part of the program on purpose to see how it han
 - Together, these testing strategies ensure that a system is not only fast under normal conditions, but also stable under pressure and resilient when failures occur. June 12th 2025 Cloudflare pushed an update that disrupted many services losing billions of dollars worldwide. This serves as a reminder as to why testing is so crucial.
 - 
 ### Tools used to do these tests
--There are a variety of different tools used to do load, stress and chaos testing. Some common load and stress testing options are k6, jmeter and locust which can all simulate user traffic at different levels. In this course we used k6 recently to perform load testing on jwt pizza. 
--For chaos testing different types of tools are used to intentionally indtroduce failures into the system. Populer choices for chaos testing are Chaos Monkey, Gremlin and LitmusChaos. 
--Platforms such as aws and grafana support these testing methods by providing infastructure, monitoring and visualization to aid in the testing but the actual tests are performed by specific tools such as k6. 
+- There are a variety of different tools used to do load, stress and chaos testing. Some common load and stress testing options are k6, jmeter and locust which can all simulate user traffic at different levels. In this course we used k6 recently to perform load testing on jwt pizza. 
+- For chaos testing different types of tools are used to intentionally indtroduce failures into the system. Populer choices for chaos testing are Chaos Monkey, Gremlin and LitmusChaos. 
+- Platforms such as aws and grafana support these testing methods by providing infastructure, monitoring and visualization to aid in the testing but the actual tests are performed by specific tools such as k6. 
 
 ### Personal Takeaways
 - Before this I thought that load testing alone was good enough. Now I understand that load testing only verifies performace under normal circumstances. More testing is required to make a sound program besides just load testing.
